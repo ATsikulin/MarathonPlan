@@ -1,0 +1,1092 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Марафон-План 3:50 — Белые Ночи 2027</title>
+<style>
+:root {
+  --bg: #0f172a;
+  --card: #1e293b;
+  --card2: #334155;
+  --accent: #3b82f6;
+  --accent2: #10b981;
+  --warn: #f59e0b;
+  --danger: #ef4444;
+  --text: #f1f5f9;
+  --text-dim: #94a3b8;
+  --border: #475569;
+}
+* { margin: 0; padding: 0; box-sizing: border-box; }
+body {
+  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+  background: var(--bg);
+  color: var(--text);
+  line-height: 1.6;
+  padding-bottom: 60px;
+}
+header {
+  background: linear-gradient(135deg, #1e3a5f, #0f172a);
+  padding: 20px;
+  text-align: center;
+  border-bottom: 2px solid var(--accent);
+}
+header h1 { font-size: 1.4em; }
+header .subtitle { color: var(--text-dim); font-size: 0.9em; }
+header .countdown {
+  display: inline-block;
+  margin-top: 8px;
+  background: var(--accent);
+  padding: 4px 16px;
+  border-radius: 20px;
+  font-weight: bold;
+  font-size: 0.95em;
+}
+nav {
+  display: flex;
+  justify-content: center;
+  gap: 4px;
+  background: var(--card);
+  padding: 8px;
+  position: sticky;
+  top: 0;
+  z-index: 100;
+  flex-wrap: wrap;
+}
+nav button {
+  background: transparent;
+  border: none;
+  color: var(--text-dim);
+  padding: 10px 18px;
+  border-radius: 8px;
+  cursor: pointer;
+  font-size: 0.9em;
+  transition: all 0.2s;
+}
+nav button.active {
+  background: var(--accent);
+  color: white;
+}
+nav button:hover:not(.active) {
+  background: var(--card2);
+  color: var(--text);
+}
+.tab-content { display: none; padding: 16px; max-width: 900px; margin: 0 auto; }
+.tab-content.active { display: block; }
+.card {
+  background: var(--card);
+  border-radius: 12px;
+  padding: 20px;
+  margin-bottom: 16px;
+  border: 1px solid var(--border);
+}
+.card h2 {
+  font-size: 1.1em;
+  margin-bottom: 12px;
+  color: var(--accent);
+}
+.pace-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(130px, 1fr));
+  gap: 10px;
+}
+.pace-box {
+  background: var(--card2);
+  border-radius: 10px;
+  padding: 14px;
+  text-align: center;
+}
+.pace-box .label { font-size: 0.8em; color: var(--text-dim); margin-bottom: 4px; }
+.pace-box .value { font-size: 1.2em; font-weight: bold; }
+.pace-box .range { font-size: 0.75em; color: var(--text-dim); margin-top: 2px; }
+.stat-row {
+  display: flex;
+  justify-content: space-around;
+  flex-wrap: wrap;
+  gap: 10px;
+}
+.stat-item { text-align: center; }
+.stat-item .num { font-size: 1.5em; font-weight: bold; color: var(--accent2); }
+.stat-item .lbl { font-size: 0.8em; color: var(--text-dim); }
+.phase-badge {
+  display: inline-block;
+  padding: 3px 10px;
+  border-radius: 12px;
+  font-size: 0.75em;
+  font-weight: bold;
+}
+.phase-recovery { background: #6366f1; color: white; }
+.phase-base { background: #10b981; color: white; }
+.phase-speed { background: #f59e0b; color: white; }
+.phase-mara { background: #ef4444; color: white; }
+.phase-taper { background: #8b5cf6; color: white; }
+.phase-race { background: #f43f5e; color: white; }
+table {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: 0.85em;
+}
+table th, table td {
+  padding: 8px 6px;
+  text-align: left;
+  border-bottom: 1px solid var(--border);
+}
+table th { color: var(--accent); font-weight: 600; }
+table tr.current-week { background: rgba(59, 130, 246, 0.15); }
+table tr.current-week td:first-child { border-left: 3px solid var(--accent); }
+.workout-types {
+  display: flex;
+  gap: 6px;
+  flex-wrap: wrap;
+  margin-bottom: 10px;
+}
+.workout-type {
+  padding: 3px 8px;
+  border-radius: 6px;
+  font-size: 0.75em;
+}
+.wt-easy { background: #1e3a5f; }
+.wt-long { background: #312e81; }
+.wt-mp { background: #be123c; }
+.wt-thr { background: #b45309; }
+.wt-int { background: #155e75; }
+.wt-rest { background: #374151; }
+.wt-race { background: #7f1d1d; }
+.input-group {
+  margin-bottom: 14px;
+}
+.input-group label {
+  display: block;
+  margin-bottom: 4px;
+  font-size: 0.85em;
+  color: var(--text-dim);
+}
+.input-group input, .input-group select {
+  width: 100%;
+  background: var(--card2);
+  border: 1px solid var(--border);
+  color: var(--text);
+  padding: 10px;
+  border-radius: 8px;
+  font-size: 0.95em;
+}
+.btn {
+  background: var(--accent);
+  color: white;
+  border: none;
+  padding: 10px 20px;
+  border-radius: 8px;
+  cursor: pointer;
+  font-size: 0.9em;
+  transition: all 0.2s;
+}
+.btn:hover { background: #2563eb; }
+.btn-green { background: var(--accent2); }
+.btn-green:hover { background: #059669; }
+.btn-warn { background: var(--warn); }
+.btn-warn:hover { background: #d97706; }
+.btn-danger { background: var(--danger); }
+.btn-danger:hover { background: #dc2626; }
+.btn-sm { padding: 6px 12px; font-size: 0.8em; }
+.workout-entry {
+  background: var(--card2);
+  border-radius: 10px;
+  padding: 14px;
+  margin-bottom: 10px;
+}
+.workout-entry .we-top {
+  display: flex;
+  justify-content: space-between;
+  align-items: start;
+  margin-bottom: 6px;
+}
+.workout-entry .we-date { font-weight: bold; font-size: 0.9em; }
+.workout-entry .we-type { font-size: 0.8em; color: var(--text-dim); }
+.workout-entry .we-stats { font-size: 0.85em; color: var(--text-dim); }
+.workout-entry .we-notes { font-size: 0.8em; color: var(--text-dim); margin-top: 4px; font-style: italic; }
+.chart-container { position: relative; height: 200px; margin: 10px 0; }
+.bar-chart { display: flex; align-items: flex-end; gap: 2px; height: 180px; padding: 10px 0; }
+.bar {
+  flex: 1;
+  background: var(--accent);
+  min-height: 2px;
+  border-radius: 3px 3px 0 0;
+  position: relative;
+  cursor: pointer;
+  transition: opacity 0.2s;
+}
+.bar:hover { opacity: 0.7; }
+.bar .bar-label {
+  position: absolute;
+  bottom: -20px;
+  left: 50%;
+  transform: translateX(-50%);
+  font-size: 0.6em;
+  color: var(--text-dim);
+}
+.bar .bar-val {
+  position: absolute;
+  top: -16px;
+  left: 50%;
+  transform: translateX(-50%);
+  font-size: 0.6em;
+  color: var(--text-dim);
+  white-space: nowrap;
+}
+.test-entry {
+  background: var(--card2);
+  border-radius: 10px;
+  padding: 14px;
+  margin-bottom: 10px;
+  border-left: 4px solid var(--warn);
+}
+.test-entry .te-top { display: flex; justify-content: space-between; margin-bottom: 6px; }
+.test-entry .te-result { font-size: 1.1em; font-weight: bold; color: var(--accent2); }
+.empty-state { text-align: center; padding: 40px 20px; color: var(--text-dim); }
+.empty-state p { margin-top: 8px; }
+.form-row { display: flex; gap: 10px; flex-wrap: wrap; }
+.form-row .input-group { flex: 1; min-width: 120px; }
+.pace-table { width: 100%; font-size: 0.85em; }
+.pace-table td { padding: 6px; }
+.legend { font-size: 0.8em; color: var(--text-dim); margin-top: 8px; }
+.legend span { margin-right: 12px; }
+.legend .dot { display: inline-block; width: 10px; height: 10px; border-radius: 50%; margin-right: 4px; vertical-align: middle; }
+@media (max-width: 600px) {
+  header h1 { font-size: 1.1em; }
+  .pace-grid { grid-template-columns: repeat(2, 1fr); }
+  table { font-size: 0.75em; }
+  nav button { padding: 8px 12px; font-size: 0.8em; }
+  .form-row { flex-direction: column; }
+}
+</style>
+</head>
+<body>
+
+<header>
+  <h1>Марафон-План: 3:50</h1>
+  <div class="subtitle">Белые Ночи, Санкт-Петербург — 4 июля 2027</div>
+  <div class="countdown" id="countdown">До старта: ...</div>
+</header>
+
+<nav>
+  <button class="active" data-tab="dashboard">📊 Дашборд</button>
+  <button data-tab="plan">📅 План</button>
+  <button data-tab="log">✏️ Журнал</button>
+  <button data-tab="test">⏱️ Тест</button>
+  <button data-tab="settings">⚙️ Настройки</button>
+</nav>
+
+<!-- DASHBOARD -->
+<div class="tab-content active" id="dashboard">
+  <div class="card">
+    <h2>Тренировочные темпы</h2>
+    <div class="pace-grid" id="paceGrid"></div>
+    <div class="legend" id="paceLegend"></div>
+  </div>
+
+  <div class="card">
+    <h2>Статистика</h2>
+    <div class="stat-row">
+      <div class="stat-item">
+        <div class="num" id="statWeeksLeft">--</div>
+        <div class="lbl">недель до старта</div>
+      </div>
+      <div class="stat-item">
+        <div class="num" id="statCurrentWeek">--</div>
+        <div class="lbl">текущая неделя</div>
+      </div>
+      <div class="stat-item">
+        <div class="num" id="statTotalKm">--</div>
+        <div class="lbl">км по плану (пик)</div>
+      </div>
+      <div class="stat-item">
+        <div class="num" id="statMarathonPace">--</div>
+        <div class="lbl">марафонский темп</div>
+      </div>
+      <div class="stat-item">
+        <div class="num" id="statPredicted">--</div>
+        <div class="lbl">прогноз марафона</div>
+      </div>
+    </div>
+  </div>
+
+  <div class="card">
+    <h2>Объём по неделям (км)</h2>
+    <div class="bar-chart" id="volumeChart"></div>
+  </div>
+
+  <div class="card" id="testProgressCard" style="display:none;">
+    <h2>Прогресс по тестам</h2>
+    <div id="testProgressList"></div>
+  </div>
+
+  <div class="card">
+    <h2>Текущая фаза</h2>
+    <div id="phaseInfo"></div>
+  </div>
+</div>
+
+<!-- PLAN -->
+<div class="tab-content" id="plan">
+  <div class="card">
+    <h2>Полный тренировочный план (40 недель)</h2>
+    <div class="workout-types">
+      <span class="workout-type wt-easy">Лёгкий</span>
+      <span class="workout-type wt-long">Длинный</span>
+      <span class="workout-type wt-mp">МП</span>
+      <span class="workout-type wt-thr">Порог</span>
+      <span class="workout-type wt-int">Интервал</span>
+      <span class="workout-type wt-rest">Отдых</span>
+      <span class="workout-type wt-race">Гонка</span>
+    </div>
+    <div style="overflow-x:auto;">
+      <table id="planTable"></table>
+    </div>
+  </div>
+</div>
+
+<!-- LOG -->
+<div class="tab-content" id="log">
+  <div class="card">
+    <h2>Добавить тренировку</h2>
+    <div class="form-row">
+      <div class="input-group">
+        <label>Дата</label>
+        <input type="date" id="logDate">
+      </div>
+      <div class="input-group">
+        <label>Тип</label>
+        <select id="logType">
+          <option value="easy">Лёгкий</option>
+          <option value="long">Длинный</option>
+          <option value="mp">Марафонский темп</option>
+          <option value="threshold">Пороговый</option>
+          <option value="interval">Интервал</option>
+          <option value="race">Гонка</option>
+          <option value="rest">Отдых</option>
+          <option value="other">Другое</option>
+        </select>
+      </div>
+    </div>
+    <div class="form-row">
+      <div class="input-group">
+        <label>Дистанция (км)</label>
+        <input type="number" id="logDist" step="0.1" placeholder="10.0">
+      </div>
+      <div class="input-group">
+        <label>Время (ЧЧ:ММ:СС)</label>
+        <input type="text" id="logTime" placeholder="00:55:00">
+      </div>
+      <div class="input-group">
+        <label>Средний пульс</label>
+        <input type="number" id="logHR" placeholder="150">
+      </div>
+    </div>
+    <div class="input-group">
+      <label>Заметки</label>
+      <input type="text" id="logNotes" placeholder="Ощущения, погода, комментарии...">
+    </div>
+    <button class="btn btn-green" onclick="addWorkout()">Добавить</button>
+  </div>
+
+  <div class="card">
+    <h2>Журнал тренировок</h2>
+    <div id="logList"></div>
+  </div>
+</div>
+
+<!-- TEST -->
+<div class="tab-content" id="test">
+  <div class="card">
+    <h2>Ввод результата теста</h2>
+    <p style="color:var(--text-dim);font-size:0.85em;margin-bottom:14px;">
+      После ввода результата все тренировочные темпы и прогноз марафона пересчитываются автоматически.
+    </p>
+    <div class="form-row">
+      <div class="input-group">
+        <label>Дата теста</label>
+        <input type="date" id="testDate">
+      </div>
+      <div class="input-group">
+        <label>Дистанция</label>
+        <select id="testDist">
+          <option value="3">3 км</option>
+          <option value="5" selected>5 км</option>
+          <option value="10">10 км</option>
+          <option value="21.0975">Полумарафон</option>
+          <option value="42.195">Марафон</option>
+        </select>
+      </div>
+    </div>
+    <div class="form-row">
+      <div class="input-group">
+        <label>Время (ЧЧ:ММ:СС)</label>
+        <input type="text" id="testTime" placeholder="00:25:00">
+      </div>
+      <div class="input-group">
+        <label>Пульс средний (опц.)</label>
+        <input type="number" id="testHR" placeholder="175">
+      </div>
+    </div>
+    <div class="input-group">
+      <label>Комментарий</label>
+      <input type="text" id="testNotes" placeholder="Условия, ощущения...">
+    </div>
+    <button class="btn btn-warn" onclick="addTest()">Записать и пересчитать темпы</button>
+  </div>
+
+  <div class="card" id="testHistoryCard">
+    <h2>История тестов</h2>
+    <div id="testList"></div>
+  </div>
+
+  <div class="card">
+    <h2>Формула пересчёта</h2>
+    <p style="font-size:0.85em;color:var(--text-dim);">
+      Прогноз марафона: <strong>T₂ = T₁ × (D₂ / D₁)<sup>1.06</sup></strong> (формула Riegel)<br>
+      Марафонский темп = прогноз / 42.195 км<br>
+      Остальные зоны — проценты от марафонской скорости (Daniels VDOT).
+    </p>
+  </div>
+</div>
+
+<!-- SETTINGS -->
+<div class="tab-content" id="settings">
+  <div class="card">
+    <h2>Цель и дата</h2>
+    <div class="input-group">
+      <label>Целевое время марафона (ЧЧ:ММ:СС)</label>
+      <input type="text" id="setGoal" placeholder="03:50:00">
+    </div>
+    <div class="input-group">
+      <label>Дата марафона</label>
+      <input type="date" id="setRaceDate">
+    </div>
+    <div class="input-group">
+      <label>Дата начала плана</label>
+      <input type="date" id="setStartDate">
+    </div>
+    <button class="btn" onclick="saveSettings()">Сохранить</button>
+  </div>
+
+  <div class="card">
+    <h2>Данные</h2>
+    <div style="display:flex;gap:10px;flex-wrap:wrap;">
+      <button class="btn btn-green" onclick="exportData()">Экспорт JSON</button>
+      <label class="btn" style="cursor:pointer;">
+        Импорт JSON
+        <input type="file" accept=".json" style="display:none;" onchange="importData(event)">
+      </label>
+      <button class="btn btn-danger" onclick="clearAll()">Очистить всё</button>
+    </div>
+    <p style="font-size:0.8em;color:var(--text-dim);margin-top:10px;">
+      Данные хранятся локально в браузере (localStorage). При смене устройства — экспортируйте и импортируйте.
+    </p>
+  </div>
+
+  <div class="card">
+    <h2>О плане</h2>
+    <p style="font-size:0.85em;color:var(--text-dim);">
+      <strong>Фазы:</strong><br>
+      🟣 Восстановление (1–2 нед) — лёгкий объём после марафона<br>
+      🟢 База (3–16 нед) — аэробная, длинные до 21км<br>
+      🟡 Скорость (17–25 нед) — интервалы, порог, темп<br>
+      🔴 Марафон (26–36 нед) — длинные до 36км, МП-отрезки<br>
+      🟣 Тейпер (37–40 нед) — снижение объёма, гонка
+    </p>
+    <p style="font-size:0.8em;color:var(--text-dim);margin-top:8px;">
+      Старт плана: 28 сентября 2026. Марафон: 4 июля 2027. Всего 40 недель.
+    </p>
+  </div>
+</div>
+
+<script>
+// ============ DATA ============
+const RACE_DATE = new Date('2027-07-04');
+const START_DATE = new Date('2026-09-28');
+const TOTAL_WEEKS = 40;
+
+const DEFAULT_GOAL = '03:50:00';
+
+function loadData() {
+  return JSON.parse(localStorage.getItem('mp_data') || '{}');
+}
+function saveData(d) {
+  localStorage.setItem('mp_data', JSON.stringify(d));
+}
+
+let data = loadData();
+if (!data.workouts) data.workouts = [];
+if (!data.tests) data.tests = [];
+if (!data.settings) data.settings = {
+  goal: DEFAULT_GOAL,
+  raceDate: '2027-07-04',
+  startDate: '2026-09-28'
+};
+saveData(data);
+
+// ============ PACE CALCULATIONS ============
+function timeToSec(t) {
+  let parts = t.split(':').map(Number);
+  if (parts.length === 3) return parts[0]*3600 + parts[1]*60 + parts[2];
+  if (parts.length === 2) return parts[0]*60 + parts[1];
+  return parts[0];
+}
+function secToTime(s) {
+  s = Math.round(s);
+  let h = Math.floor(s/3600);
+  let m = Math.floor((s%3600)/60);
+  let sec = s%60;
+  return `${h}:${String(m).padStart(2,'0')}:${String(sec).padStart(2,'0')}`;
+}
+function secToPace(s) {
+  // seconds per km -> mm:ss
+  let m = Math.floor(s/60);
+  let sec = Math.round(s%60);
+  return `${m}:${String(sec).padStart(2,'0')}`;
+}
+function paceToSec(p) {
+  let parts = p.split(':').map(Number);
+  return parts[0]*60 + (parts[1]||0);
+}
+
+// Riegel prediction
+function predictMarathon(dist, timeSec) {
+  let t2 = timeSec * Math.pow(42.195 / dist, 1.06);
+  return t2;
+}
+
+// Daniels VDOT approach (simplified)
+// v = dist / time; then paces as fractions of v
+function calcPaces() {
+  let maraPace; // sec/km
+
+  if (data.tests.length > 0) {
+    let lastTest = data.tests[data.tests.length - 1];
+    let testSec = timeToSec(lastTest.time);
+    let predicted = predictMarathon(lastTest.dist, testSec);
+    maraPace = predicted / 42.195;
+  } else {
+    // Use goal
+    let goalSec = timeToSec(data.settings.goal);
+    maraPace = goalSec / 42.195;
+  }
+
+  // Speed in km/s
+  let maraSpeed = 1 / maraPace; // km per sec
+
+  // Zones as percentage of marathon speed
+  // Easy: 70-75% of mara speed -> pace = maraPace / 0.72 (approx)
+  // Long: 75-80%
+  // Marathon: 97-100%
+  // Threshold: 103-105%
+  // Interval: 108-112%
+  // Repetition: 115-120%
+
+  let zones = {
+    easy: { lo: maraPace / 0.70, hi: maraPace / 0.75, label: 'Лёгкий', color: '#1e3a5f' },
+    long: { lo: maraPace / 0.75, hi: maraPace / 0.80, label: 'Длинный', color: '#312e81' },
+    mp: { lo: maraPace / 0.97, hi: maraPace, label: 'Марафонский', color: '#be123c' },
+    threshold: { lo: maraPace / 1.03, hi: maraPace / 1.05, label: 'Пороговый', color: '#b45309' },
+    interval: { lo: maraPace / 1.08, hi: maraPace / 1.12, label: 'Интервал', color: '#155e75' },
+    repetition: { lo: maraPace / 1.15, hi: maraPace / 1.20, label: 'Повторения', color: '#6b21a8' }
+  };
+
+  let predictedMara = data.tests.length > 0
+    ? predictMarathon(data.tests[data.tests.length-1].dist, timeToSec(data.tests[data.tests.length-1].time))
+    : timeToSec(data.settings.goal);
+
+  return { zones, maraPace, predictedMara };
+}
+
+// ============ PLAN GENERATION ============
+function getWeekPhase(week) {
+  if (week <= 2) return 'recovery';
+  if (week <= 16) return 'base';
+  if (week <= 25) return 'speed';
+  if (week <= 36) return 'mara';
+  if (week <= 39) return 'taper';
+  return 'race';
+}
+
+function getPhaseInfo(phase) {
+  const info = {
+    recovery: { name: 'Восстановление', color: 'phase-recovery', desc: 'Лёгкие пробежки, восстановление после марафона. Без скорости и длинных.' },
+    base: { name: 'Базовая (зима)', color: 'phase-base', desc: 'Аэробная база. Рост объёма, длинные пробежки. Основа для всего.' },
+    speed: { name: 'Скоростно-силовая', color: 'phase-speed', desc: 'Интервалы, пороговые темповые. Качество и сила.' },
+    mara: { name: 'Марафонская', color: 'phase-mara', desc: 'Длинные с МП-отрезками, пиковый объём. Специфика гонки.' },
+    taper: { name: 'Тейпер', color: 'phase-taper', desc: 'Снижение объёма, сохранение свежести к старту.' },
+    race: { name: 'Гонка', color: 'phase-race', desc: 'Неделя марафона. Минимум тренировок, максимум отдыха.' }
+  };
+  return info[phase] || info.recovery;
+}
+
+// Weekly plans: [day1, day2, day3, day4, day5, day6, day7]
+// Each day: {type, desc, km}
+// types: rest, easy, long, mp, threshold, interval, race
+
+function generatePlan() {
+  const p = [];
+
+  // Phase 1: Recovery (weeks 1-2)
+  p.push([
+    {t:'rest', d:'Отдых', km:0},
+    {t:'easy', d:'30 мин лёгко', km:4},
+    {t:'rest', d:'Отдых', km:0},
+    {t:'easy', d:'30 мин лёгко', km:4},
+    {t:'rest', d:'Отдых', km:0},
+    {t:'easy', d:'40 мин лёгко', km:6},
+    {t:'rest', d:'Отдых', km:0}
+  ]);
+  p.push([
+    {t:'rest', d:'Отдых', km:0},
+    {t:'easy', d:'35 мин лёгко', km:5},
+    {t:'rest', d:'Отдых', km:0},
+    {t:'easy', d:'40 мин лёгко', km:6},
+    {t:'rest', d:'Отдых', km:0},
+    {t:'easy', d:'50 мин лёгко', km:7},
+    {t:'rest', d:'Отдых', km:0}
+  ]);
+
+  // Phase 2: Base (weeks 3-16) - 14 weeks
+  // Gradual volume increase with step-back weeks
+  const baseWeeks = [
+    {vol:24, long:10, int:'easy'},
+    {vol:26, long:12, int:'easy'},
+    {vol:28, long:14, int:'easy'},
+    {vol:22, long:10, int:'easy'},  // step-back
+    {vol:30, long:15, int:'easy'},
+    {vol:32, long:16, int:'easy'},
+    {vol:34, long:18, int:'easy'},
+    {vol:28, long:12, int:'easy'},  // step-back
+    {vol:36, long:18, int:'tempo'},
+    {vol:38, long:20, int:'tempo'},
+    {vol:40, long:21, int:'tempo'},
+    {vol:32, long:14, int:'easy'},  // step-back
+    {vol:42, long:21, int:'tempo'},
+    {vol:46, long:21, int:'tempo'}
+  ];
+
+  baseWeeks.forEach((w, i) => {
+    let hasTempo = w.int === 'tempo';
+    let midDist = Math.round((w.vol - w.long - (hasTempo?10:8)) / 2);
+    p.push([
+      {t:'rest', d:'Отдых', km:0},
+      {t:'easy', d:midDist+' км лёгко', km:midDist},
+      {t: hasTempo?'threshold':'easy', d: hasTempo?('6 км пороговый'):('6 км лёгко'), km: hasTempo?6:6},
+      {t:'rest', d:'Отдых', km:0},
+      {t:'easy', d:(w.vol-w.long-(hasTempo?10:8)-midDist)+' км лёгко', km:w.vol-w.long-(hasTempo?10:8)-midDist},
+      {t:'long', d:w.long+' км длинный', km:w.long},
+      {t:'rest', d:'Отдых', km:0}
+    ]);
+  });
+
+  // Phase 3: Speed (weeks 17-25) - 9 weeks
+  const speedWeeks = [
+    {vol:40, long:16, wk:'int4x400'},
+    {vol:42, long:18, wk:'int6x400'},
+    {vol:44, long:18, wk:'int5x800'},
+    {vol:38, long:14, wk:'int6x400'},  // step-back
+    {vol:46, long:20, wk:'int6x800'},
+    {vol:48, long:20, wk:'int8x400'},
+    {vol:50, long:22, wk:'int5x1000'},
+    {vol:42, long:16, wk:'int6x800'},  // step-back
+    {vol:52, long:22, wk:'int6x1000'}
+  ];
+
+  speedWeeks.forEach((w) => {
+    let intDesc = '';
+    let intKm = 0;
+    let intWarmup = 3;
+    let intCooldown = 2;
+    if (w.wk.startsWith('int4x400')) { intDesc='4×400 м + 200 отдых'; intKm=4*0.4; }
+    if (w.wk.startsWith('int6x400')) { intDesc='6×400 м + 200 отдых'; intKm=6*0.4; }
+    if (w.wk.startsWith('int5x800')) { intDesc='5×800 м + 400 отдых'; intKm=5*0.8; }
+    if (w.wk.startsWith('int6x800')) { intDesc='6×800 м + 400 отдых'; intKm=6*0.8; }
+    if (w.wk.startsWith('int8x400')) { intDesc='8×400 м + 200 отдых'; intKm=8*0.4; }
+    if (w.wk.startsWith('int5x1000')) { intDesc='5×1000 м + 400 отдых'; intKm=5*1.0; }
+    if (w.wk.startsWith('int6x1000')) { intDesc='6×1000 м + 400 отдых'; intKm=6*1.0; }
+
+    let intervalTotal = intWarmup + intKm + intCooldown;
+    let easy1 = Math.round((w.vol - w.long - intervalTotal) / 2);
+    let easy2 = w.vol - w.long - intervalTotal - easy1;
+    p.push([
+      {t:'rest', d:'Отдых', km:0},
+      {t:'easy', d:easy1+' км лёгко', km:easy1},
+      {t:'interval', d:intWarmup+' км разм + '+intDesc+' + '+intCooldown+' км зам', km:intervalTotal},
+      {t:'rest', d:'Отдых', km:0},
+      {t:'easy', d:easy2+' км лёгко', km:easy2},
+      {t:'long', d:w.long+' км длинный', km:w.long},
+      {t:'rest', d:'Отдых', km:0}
+    ]);
+  });
+
+  // Phase 4: Marathon (weeks 26-36) - 11 weeks
+  const maraWeeks = [
+    {vol:50, long:24, mp:0},
+    {vol:54, long:26, mp:0},
+    {vol:58, long:28, mp:8},
+    {vol:48, long:20, mp:0},  // step-back
+    {vol:60, long:30, mp:10},
+    {vol:64, long:32, mp:12},
+    {vol:68, long:34, mp:14},
+    {vol:56, long:24, mp:8},  // step-back
+    {vol:70, long:36, mp:16},
+    {vol:72, long:34, mp:18},
+    {vol:60, long:28, mp:12}  // pre-taper
+  ];
+
+  maraWeeks.forEach((w) => {
+    let longDesc = w.long+' км длинный' + (w.mp>0 ? (' (последние '+w.mp+'км в МП)') : '');
+    let easyTotal = w.vol - w.long - 10;
+    let easy1 = Math.round(easyTotal/2);
+    let easy2 = easyTotal - easy1;
+    p.push([
+      {t:'rest', d:'Отдых', km:0},
+      {t:'easy', d:easy1+' км лёгко', km:easy1},
+      {t:'threshold', d:'4 км пороговый (разм 2+пор 4+зам 2)', km:8},
+      {t:'rest', d:'Отдых', km:0},
+      {t:'easy', d:easy2+' км лёгко', km:easy2},
+      {t: w.mp>0?'mp':'long', d:longDesc, km:w.long},
+      {t:'rest', d:'Отдых', km:0}
+    ]);
+  });
+
+  // Phase 5: Taper (weeks 37-39) - 3 weeks
+  p.push([
+    {t:'rest', d:'Отдых', km:0},
+    {t:'easy', d:'8 км лёгко', km:8},
+    {t:'threshold', d:'3 км пороговый', km:7},
+    {t:'rest', d:'Отдых', km:0},
+    {t:'easy', d:'6 км лёгко', km:6},
+    {t:'easy', d:'14 км лёгко', km:14},
+    {t:'rest', d:'Отдых', km:0}
+  ]);
+  p.push([
+    {t:'rest', d:'Отдых', km:0},
+    {t:'easy', d:'6 км лёгко', km:6},
+    {t:'easy', d:'5 км с ускорениями', km:5},
+    {t:'rest', d:'Отдых', km:0},
+    {t:'easy', d:'5 км лёгко', km:5},
+    {t:'easy', d:'10 км лёгко', km:10},
+    {t:'rest', d:'Отдых', km:0}
+  ]);
+  p.push([
+    {t:'rest', d:'Отдых', km:0},
+    {t:'easy', d:'4 км лёгко', km:4},
+    {t:'easy', d:'3 км с 2 ускорениями', km:3},
+    {t:'rest', d:'Отдых', km:0},
+    {t:'easy', d:'3 км лёгко', km:3},
+    {t:'easy', d:'5 км лёгко', km:5},
+    {t:'rest', d:'Отдых', km:0}
+  ]);
+
+  // Week 40: Race week
+  p.push([
+    {t:'rest', d:'Отдых', km:0},
+    {t:'easy', d:'3 км лёгко + ускорения', km:3},
+    {t:'rest', d:'Отдых', km:0},
+    {t:'easy', d:'2 км лёгко', km:2},
+    {t:'rest', d:'Отдых', km:0},
+    {t:'easy', d:'2 км разминка', km:2},
+    {t:'race', d:'🏁 МАРАФОН — 42.195 км', km:42.195}
+  ]);
+
+  return p;
+}
+
+let plan = generatePlan();
+
+// ============ CURRENT WEEK CALC ============
+function getCurrentWeekNum() {
+  let now = new Date();
+  let diff = Math.floor((now - START_DATE) / (7 * 24 * 3600 * 1000)) + 1;
+  return Math.max(1, Math.min(TOTAL_WEEKS, diff));
+}
+
+function weekDates(weekNum) {
+  let start = new Date(START_DATE);
+  start.setDate(start.getDate() + (weekNum - 1) * 7);
+  let end = new Date(start);
+  end.setDate(end.getDate() + 6);
+  let fmt = (d) => `${String(d.getDate()).padStart(2,'0')}.${String(d.getMonth()+1).padStart(2,'0')}`;
+  return `${fmt(start)} – ${fmt(end)}`;
+}
+
+// ============ RENDER ============
+const typeLabels = {
+  rest: 'Отдых', easy: 'Лёгкий', long: 'Длинный', mp: 'МП',
+  threshold: 'Порог', interval: 'Интервал', race: 'Гонка', other: 'Другое'
+};
+const typeClasses = {
+  rest: 'wt-rest', easy: 'wt-easy', long: 'wt-long', mp: 'wt-mp',
+  threshold: 'wt-thr', interval: 'wt-int', race: 'wt-race', other: 'wt-rest'
+};
+
+function renderDashboard() {
+  let { zones, maraPace, predictedMara } = calcPaces();
+  let grid = document.getElementById('paceGrid');
+  grid.innerHTML = '';
+  Object.entries(zones).forEach(([k, z]) => {
+    grid.innerHTML += `
+      <div class="pace-box">
+        <div class="label">${z.label}</div>
+        <div class="value">${secToPace(z.lo)}</div>
+        <div class="range">– ${secToPace(z.hi)} /км</div>
+      </div>`;
+  });
+
+  document.getElementById('paceLegend').innerHTML = `
+    <span><span class="dot" style="background:${zones.easy.color}"></span>Лёгкий</span>
+    <span><span class="dot" style="background:${zones.long.color}"></span>Длинный</span>
+    <span><span class="dot" style="background:${zones.mp.color}"></span>МП</span>
+    <span><span class="dot" style="background:${zones.threshold.color}"></span>Порог</span>
+    <span><span class="dot" style="background:${zones.interval.color}"></span>Интервал</span>`;
+
+  let curWeek = getCurrentWeekNum();
+  let weeksLeft = TOTAL_WEEKS - curWeek;
+  document.getElementById('statWeeksLeft').textContent = weeksLeft;
+  document.getElementById('statCurrentWeek').textContent = curWeek;
+  document.getElementById('statTotalKm').textContent = '72';
+  document.getElementById('statMarathonPace').textContent = secToPace(maraPace);
+  document.getElementById('statPredicted').textContent = secToTime(predictedMara);
+
+  // Volume chart
+  let chart = document.getElementById('volumeChart');
+  chart.innerHTML = '';
+  let maxVol = 0;
+  plan.forEach(week => {
+    let vol = week.reduce((s, d) => s + d.km, 0);
+    if (vol > maxVol) maxVol = vol;
+  });
+  plan.forEach((week, i) => {
+    let vol = week.reduce((s, d) => s + d.km, 0);
+    let h = (vol / maxVol) * 100;
+    let phase = getWeekPhase(i+1);
+    let colors = {recovery:'#6366f1', base:'#10b981', speed:'#f59e0b', mara:'#ef4444', taper:'#8b5cf6', race:'#f43f5e'};
+    chart.innerHTML += `<div class="bar" style="height:${h}%;background:${colors[phase]}" title="Нед. ${i+1}: ${vol} км">
+      <div class="bar-val">${vol}</div>
+      <div class="bar-label">${i+1}</div>
+    </div>`;
+  });
+
+  // Countdown
+  let daysLeft = Math.ceil((RACE_DATE - new Date()) / (24*3600*1000));
+  document.getElementById('countdown').textContent = `До старта: ${daysLeft} дней (нед. ${curWeek}/${TOTAL_WEEKS})`;
+
+  // Phase info
+  let phase = getWeekPhase(curWeek);
+  let pi = getPhaseInfo(phase);
+  document.getElementById('phaseInfo').innerHTML = `
+    <span class="phase-badge ${pi.color}">${pi.name}</span>
+    <p style="margin-top:8px;color:var(--text-dim);font-size:0.9em;">${pi.desc}</p>
+    <p style="margin-top:6px;font-size:0.85em;">Неделя ${curWeek} из ${TOTAL_WEEKS} — ${weekDates(curWeek)}</p>
+  `;
+
+  // Test progress
+  if (data.tests.length > 0) {
+    document.getElementById('testProgressCard').style.display = 'block';
+    let tl = document.getElementById('testProgressList');
+    tl.innerHTML = '';
+    data.tests.forEach(t => {
+      let pred = predictMarathon(t.dist, timeToSec(t.time));
+      tl.innerHTML += `<div style="padding:6px 0;border-bottom:1px solid var(--border);">
+        <strong>${t.dist} км</strong> за ${t.time} → прогноз марафона: <strong style="color:var(--accent2)">${secToTime(pred)}</strong>
+        <span style="color:var(--text-dim);font-size:0.8em;"> (${t.date})</span></div>`;
+    });
+  }
+}
+
+function renderPlan() {
+  let curWeek = getCurrentWeekNum();
+  let tbl = document.getElementById('planTable');
+  tbl.innerHTML = `<tr><th>Нед.</th><th>Даты</th><th>Фаза</th><th>Пн</th><th>Вт</th><th>Ср</th><th>Чт</th><th>Пт</th><th>Сб</th><th>Вс</th><th>км</th></tr>`;
+
+  plan.forEach((week, i) => {
+    let wn = i + 1;
+    let phase = getWeekPhase(wn);
+    let pi = getPhaseInfo(phase);
+    let vol = week.reduce((s, d) => s + d.km, 0);
+    let cls = wn === curWeek ? 'current-week' : '';
+    let cells = week.map(d => `<td><span class="workout-type ${typeClasses[d.t]}">${d.d}</span></td>`).join('');
+    tbl.innerHTML += `<tr class="${cls}">
+      <td><strong>${wn}</strong></td>
+      <td style="white-space:nowrap;font-size:0.8em;">${weekDates(wn)}</td>
+      <td><span class="phase-badge ${pi.color}" style="font-size:0.65em;">${pi.name}</span></td>
+      ${cells}
+      <td><strong>${vol}</strong></td>
+    </tr>`;
+  });
+}
+
+function renderLog() {
+  let list = document.getElementById('logList');
+  if (data.workouts.length === 0) {
+    list.innerHTML = '<div class="empty-state"><p>Пока нет записей. Добавьте первую тренировку!</p></div>';
+    return;
+  }
+  list.innerHTML = '';
+  [...data.workouts].reverse().forEach((w, idx) => {
+    let pace = w.dist > 0 && w.time ? secToPace(timeToSec(w.time)/w.dist) : '-';
+    list.innerHTML += `<div class="workout-entry">
+      <div class="we-top">
+        <div>
+          <span class="we-date">${w.date}</span>
+          <span class="workout-type ${typeClasses[w.type]||'wt-rest'}" style="margin-left:8px;">${typeLabels[w.type]||w.type}</span>
+        </div>
+        <button class="btn btn-danger btn-sm" onclick="deleteWorkout(${data.workouts.length-1-idx})">✕</button>
+      </div>
+      <div class="we-stats">
+        ${w.dist>0?w.dist+' км · ':''}${w.time||''}${w.dist>0&&w.time?' · темп '+pace+'/км':''}
+        ${w.hr?' · пульс '+w.hr:''}
+      </div>
+      ${w.notes?`<div class="we-notes">${w.notes}</div>`:''}
+    </div>`;
+  });
+}
+
+function renderTests() {
+  let list = document.getElementById('testList');
+  if (data.tests.length === 0) {
+    list.innerHTML = '<div class="empty-state"><p>Нет тестов. Первый тест — через 3-4 недели восстановления.</p></div>';
+    return;
+  }
+  list.innerHTML = '';
+  [...data.tests].reverse().forEach((t, idx) => {
+    let pred = predictMarathon(t.dist, timeToSec(t.time));
+    list.innerHTML += `<div class="test-entry">
+      <div class="te-top">
+        <div><strong>${t.date}</strong> — ${t.dist} км</div>
+        <button class="btn btn-danger btn-sm" onclick="deleteTest(${data.tests.length-1-idx})">✕</button>
+      </div>
+      <div class="te-result">${t.time}</div>
+      <div style="color:var(--text-dim);font-size:0.85em;">
+        Темп: ${secToPace(timeToSec(t.time)/t.dist)}/км${t.hr?' · пульс '+t.hr:''}
+        → прогноз марафона: <strong style="color:var(--accent2)">${secToTime(pred)}</strong>
+      </div>
+      ${t.notes?`<div style="font-size:0.8em;color:var(--text-dim);font-style:italic;margin-top:4px;">${t.notes}</div>`:''}
+    </div>`;
+  });
+}
+
+// ============ ACTIONS ============
+function addWorkout() {
+  let w = {
+    date: document.getElementById('logDate').value,
+    type: document.getElementById('logType').value,
+    dist: parseFloat(document.getElementById('logDist').value) || 0,
+    time: document.getElementById('logTime').value,
+    hr: parseInt(document.getElementById('logHR').value) || null,
+    notes: document.getElementById('logNotes').value
+  };
+  if (!w.date) { alert('Укажите дату'); return; }
+  data.workouts.push(w);
+  saveData(data);
+  renderLog();
+  document.getElementById('logDist').value = '';
+  document.getElementById('logTime').value = '';
+  document.getElementById('logHR').value = '';
+  document.getElementById('logNotes').value = '';
+}
+
+function deleteWorkout(idx) {
+  data.workouts.splice(idx, 1);
+  saveData(data);
+  renderLog();
+}
+
+function addTest() {
+  let t = {
+    date: document.getElementById('testDate').value,
+    dist: parseFloat(document.getElementById('testDist').value),
+    time: document.getElementById('testTime').value,
+    hr: parseInt(document.getElementById('testHR').value) || null,
+    notes: document.getElementById('testNotes').value
+  };
+  if (!t.date || !t.time) { alert('Укажите дату и время'); return; }
+  data.tests.push(t);
+  saveData(data);
+  renderTests();
+  renderDashboard();
+  let { predictedMara } = calcPaces();
+  alert('Темпы пересчитаны!\n\nНовый прогноз марафона: ' + secToTime(predictedMara));
+  document.getElementById('testTime').value = '';
+  document.getElementById('testHR').value = '';
+  document.getElementById('testNotes').value = '';
+}
+
+function deleteTest(idx) {
+  data.tests.splice(idx, 1);
+  saveData(data);
+  renderTests();
+  renderDashboard();
+}
+
+function saveSettings() {
+  data.settings.goal = document.getElementById('setGoal').value || DEFAULT_GOAL;
+  data.settings.raceDate = document.getElementById('setRaceDate').value;
+  data.settings.startDate = document.getElementById('setStartDate').value;
+  saveData(data);
+  renderDashboard();
+  alert('Настройки сохранены! Темпы пересчитаны.');
+}
+
+function exportData() {
+  let blob = new Blob([JSON.stringify(data, null, 2)], {type:'application/json'});
+  let url = URL.createObjectURL(blob);
+  let a = document.createElement('a');
+  a.href = url;
+  a.download = 'marathon-data.json';
+  a.click();
+}
+
+function importData(e) {
+  let file = e.target.files[0];
+  if (!file) return;
+  let reader = new FileReader();
+  reader.onload = (ev) => {
+    data = JSON.parse(ev.target.result);
+    saveData(data);
+    renderAll();
+    alert('Данные импортированы!');
+  };
+  reader.readAsText(file);
+}
+
+function clearAll() {
+  if (confirm('Удалить все данные? Это нельзя отменить.')) {
+    localStorage.removeItem('mp_data');
+    location.reload();
+  }
+}
+
+function renderAll() {
+  renderDashboard();
+  renderPlan();
+  renderLog();
+  renderTests();
+}
+
+// ============ INIT ============
+document.querySelectorAll('nav button').forEach(btn => {
+  btn.addEventListener('click', () => {
+    document.querySelectorAll('nav button').forEach(b => b.classList.remove('active'));
+    btn.classList.add('active');
+    document.querySelectorAll('.tab-content').forEach(tc => tc.classList.remove('active'));
+    document.getElementById(btn.dataset.tab).classList.add('active');
+  });
+});
+
+// Set default dates
+let today = new Date();
+let todayStr = today.toISOString().split('T')[0];
+document.getElementById('logDate').value = todayStr;
+document.getElementById('testDate').value = todayStr;
+document.getElementById('setGoal').value = data.settings.goal;
+document.getElementById('setRaceDate').value = data.settings.raceDate;
+document.getElementById('setStartDate').value = data.settings.startDate;
+
+renderAll();
+</script>
+</body>
+</html>
